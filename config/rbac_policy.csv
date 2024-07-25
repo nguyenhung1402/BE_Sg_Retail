@@ -1,0 +1,89 @@
+p, admin, items_group, GET
+p, admin, items_group, POST
+p, admin, items_group, PUT
+p, admin, /api/v1/items, GET
+p, user, items_group, GET
+p, user, items_group, POST
+p, user, items_group, PUT
+p, user, /api/v1/items, GET
+g, /api/v1/items/:id, items_group
+p, admin, member_group, GET
+p, admin, /api/v1/menus, GET
+g, /api/v1/members/:id, member_group
+p, admin, business_group, GET
+p, admin, business_group, POST
+p, admin, business_group, PUT
+p, admin, /api/v1/business, GET
+p, user, business_group, GET
+p, user, business_group, POST
+p, user, business_group, PUT
+p, user, /api/v1/business, GET
+g, /api/v1/business/:id, business_group
+p, admin, activitive_group, GET
+p, admin, activitive_group, POST
+p, admin, activitive_group, PUT
+p, admin, /api/v1/activities, GET
+p, user, activitive_group, GET
+p, user, activitive_group, POST
+p, user, activitive_group, PUT
+p, user, /api/v1/activities, GET
+g, /api/v1/activities/:id, activitive_group
+p, admin, opportunities_group, GET
+p, admin, opportunities_group, POST
+p, admin, opportunities_group, PUT
+p, admin, /api/v1/opportunities, GET
+p, user, opportunities_group, GET
+p, user, opportunities_group, POST
+p, user, opportunities_group, PUT
+p, user, /api/v1/opportunities, GET
+g, /api/v1/opportunities/:id, opportunities_group
+p, admin, po_group, GET
+p, admin, po_group, POST
+p, admin, po_group, PUT
+p, admin, /api/v1/po, GET
+p, user, po_group, GET
+p, user, po_group, POST
+p, user, po_group, PUT
+p, user, /api/v1/po, GET
+g, /api/v1/po/:id, po_group
+p, admin, podetails_group, GET
+p, admin, podetails_group, POST
+p, admin, podetails_group, PUT
+p, admin, /api/v1/podetails, GET
+p, user, podetails_group, GET
+p, user, podetails_group, POST
+p, user, podetails_group, PUT
+p, user, /api/v1/podetails, GET
+g, /api/v1/podetails/:id, podetails_group
+p, admin, so_group, GET
+p, admin, so_group, POST
+p, admin, so_group, PUT
+p, admin, /api/v1/so, GET
+p, user, so_group, GET
+p, user, so_group, POST
+p, user, so_group, PUT
+p, user, /api/v1/so, GET
+g, /api/v1/so/:id, so_group
+p, admin, sodetails_group, GET
+p, admin, sodetails_group, POST
+p, admin, sodetails_group, PUT
+p, admin, /api/v1/sodetails, GET
+p, user, sodetails_group, GET
+p, user, sodetails_group, POST
+p, user, sodetails_group, PUT
+p, user, /api/v1/sodetails, GET
+g, /api/v1/sodetails/:id, sodetails_group
+p, admin, orderdetails_group, GET
+p, admin, orderdetails_group, POST
+p, admin, orderdetails_group, PUT
+p, admin, /api/v1/orderDetail, GET
+g, /api/v1/configsetting/:id, configsetting_group
+p, admin, configsettings_group, GET
+p, admin, configsettings_group, POST
+p, admin, configsettings_group, PUT
+p, admin, /api/v1/configsetting, GET
+p, user, configsetting_group, GET
+p, user, configsetting_group, POST
+p, user, configsetting_group, PUT
+p, user, /api/v1/configsetting, GET
+
