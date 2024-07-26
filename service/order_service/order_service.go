@@ -21,6 +21,8 @@ type Order struct {
 	Refund       float64
 	CardCode     string
 	CardName     string
+	StaffCode    string
+	StaffName    string
 	VAT          int
 	Creator      string
 	ViewPayment  string
@@ -31,7 +33,11 @@ type Order struct {
 	// UoMUnit      string
 	// DeliveryDate string
 }
-
+type StaffOrder struct {
+	StaffCode string  `gorm:"column:StaffCode" json:"staffcode"`
+	StaffName string  `gorm:"column:StaffName" json:"staffname"`
+	TotalSum  float64 `gorm:"column:Total" json:"total"`
+}
 type OrderDetails struct {
 	ItemCode string
 	ItemName string
@@ -74,6 +80,7 @@ func (a *Order) AddOrder() error {
 		list[i] = item
 	}
 	autoOrder, _ := models.GetORDERIDAuto_Model()
+	fmt.Println(a)
 	item := map[string]interface{}{
 		"tablename":    a.TableName,
 		"tablenumber":  a.TableNumber,
@@ -89,6 +96,8 @@ func (a *Order) AddOrder() error {
 		"refund":       a.Refund,
 		"cardcode":     a.CardCode,
 		"cardname":     a.CardName,
+		"staffcode":    a.StaffCode,
+		"staffname":    a.StaffName,
 		"vat":          a.VAT,
 		"creator":      a.Creator,
 		"viewpayment":  a.ViewPayment,
@@ -144,6 +153,16 @@ func (a *Order) UpdateOrder(id string) error {
 // Get all order
 func (a *Order) GetOrder_Service() (*[]models.Order, error) {
 	order, err := models.GetOrder_Model()
+	if err != nil {
+		return nil, err
+	}
+	//fmt.Println(item)
+	return order, nil
+}
+
+// staff
+func (a *Order) StaffOder_Service() (*[]models.StaffOrder, error) {
+	order, err := models.StaffOrder_Model()
 	if err != nil {
 		return nil, err
 	}

@@ -23,6 +23,8 @@ type Order struct {
 	Refund       float64        `gorm:"column:Refund" json:"refund"`
 	CardCode     string         `gorm:"column:CardCode" json:"cardcode"`
 	CardName     string         `gorm:"column:CardName" json:"cardname"`
+	StaffCode    string         `gorm:"column:StaffCode" json:"staffcode"`
+	StaffName    string         `gorm:"column:StaffName" json:"staffname"`
 	VAT          int            `gorm:"column:VAT" json:"vat"`
 	Creator      string         `gorm:"column:Creator" json:"creator"`
 	ViewPayment  string         `gorm:"column:ViewPayment" json:"viewpayment"`
@@ -35,6 +37,11 @@ type Order struct {
 	// DeliveryDate string      `gorm:"column:DeliveryDate" json:"deliverydate"`
 }
 
+type StaffOrder struct {
+	StaffCode string  `gorm:"column:StaffCode" json:"staffcode"`
+	StaffName string  `gorm:"column:StaffName" json:"staffname"`
+	Total     float64 `gorm:"column:Total" json:"total"`
+}
 type WhsCodeQuantity struct {
 	WhsCode  string `gorm:"column:WhsCode" json:"whscode"`
 	ItemCode string `gorm:"column:ItemCode" json:"itemcode"`
@@ -71,6 +78,8 @@ func AddOrder(data map[string]interface{}, dataDetail []map[string]interface{}) 
 		Refund:       data["refund"].(float64),
 		CardCode:     data["cardcode"].(string),
 		CardName:     data["cardname"].(string),
+		StaffName:    data["staffname"].(string),
+		StaffCode:    data["staffcode"].(string),
 		VAT:          data["vat"].(int),
 		Creator:      data["creator"].(string),
 		CodeAuto:     data["codeauto"].(string),
@@ -154,6 +163,23 @@ func GetOrder_Model() (*[]Order, error) {
 	}
 
 	return &order, nil
+}
+
+//Staff Oder
+
+func StaffOrder_Model() (*[]StaffOrder, error) {
+	order := []StaffOrder{}
+	err := db.Raw(`SELECT StaffCode, StaffName, SUM(Total) AS Total
+		FROM orders
+		GROUP BY StaffCode, StaffName;
+	`).Find(&order).Error
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return &order, nil
+
 }
 
 func PostGetOrder_Model(day string, month string, year string) (*[]Order, error) {
@@ -302,7 +328,6 @@ func GetTablenumber(code string, date string) (*[]Order, error) {
 
 	return &order, nil
 }
-
 
 func GetTablenumberNotThanhToan(code string, date string) (*[]Order, error) {
 	order := []Order{}

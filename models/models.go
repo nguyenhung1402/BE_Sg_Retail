@@ -31,7 +31,7 @@ func Setup() {
 		PrepareStmt: true,
 	})
 
-	db.AutoMigrate(&Member{}, &MemberCredentials{}, &Items{}, &BPs{}, &ParentMenu{}, &ChildMenu{}, &Order{}, &OrderDetails{}, &Warehouse{}, &POS{}, &POSDetails{}, &Receipt{}, &ReceiptDetails{}, &Issue{}, &IssueDetails{}, &Category{}, &Table{}, &ConfigSettingApp{})
+	db.AutoMigrate(&Member{}, &MemberCredentials{}, &Items{}, &BPs{}, &ParentMenu{}, &ChildMenu{}, &Order{}, &OrderDetails{}, &Warehouse{}, &POS{}, &POSDetails{}, &Receipt{}, &ReceiptDetails{}, &Issue{}, &IssueDetails{}, &Category{}, &Table{}, &ConfigSettingApp{}, &Staff{})
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
 	}

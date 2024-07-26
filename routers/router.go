@@ -85,6 +85,13 @@ func InitRouter(r *fiber.App) {
 	businessRoute.Post("/", v1.PostBPs)
 	businessRoute.Put("/:id", v1.PutBPs)
 
+	// Staff
+	staffRoute := apiv1.Group("/staff")
+	staffRoute.Get("/", v1.GetStaff_Router)
+	staffRoute.Get("/:id", v1.GetByIdStaff_Router)
+	staffRoute.Post("/", v1.PostStaff)
+	staffRoute.Put("/:id", v1.PutStaff)
+
 	// Warehouse
 	warehouseRoute := apiv1.Group("/warehouse")
 	warehouseRoute.Get("/", v1.GetWhs_Router)
@@ -95,6 +102,7 @@ func InitRouter(r *fiber.App) {
 	// Order
 	orderRoute := apiv1.Group("/order")
 	orderRoute.Get("/", v1.GetOrder_Router)
+	orderRoute.Get("/staff", v1.Staff_Oder)
 	orderRoute.Get("/:id", v1.GetByIdOrder_Router)
 	orderRoute.Post("/allthanhtoan", v1.GetTablenumberNotThanhToan_Router)
 	orderRoute.Post("/", v1.PostOrder)

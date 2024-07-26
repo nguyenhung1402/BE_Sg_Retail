@@ -22,6 +22,8 @@ type FormOrder struct {
 	Refund       float64            `json:"Refund"`
 	CardCode     string             `json:"CardCode"`
 	CardName     string             `json:"CardName"`
+	StaffCode    string             `json:"StaffCode"`
+	StaffName    string             `json:"StaffName"`
 	VAT          int                `json:"VAT"`
 	Creator      string             `json:"Creator"`
 	CodeAuto     string             `json:"CodeAuto"`
@@ -117,6 +119,8 @@ func PostOrder(c *fiber.Ctx) error {
 		Refund:      form.Refund,
 		CardCode:    form.CardCode,
 		CardName:    form.CardName,
+		StaffName:   form.StaffName,
+		StaffCode:   form.StaffCode,
 		VAT:         form.VAT,
 		Creator:     form.Creator,
 		ViewPayment: form.ViewPayment,
@@ -214,6 +218,24 @@ func PutOrder(c *fiber.Ctx) error {
 func GetOrder_Router(c *fiber.Ctx) error {
 	order := order_service.Order{}
 	data, err := order.GetOrder_Service()
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    data,
+	})
+}
+
+// staff
+func Staff_Oder(c *fiber.Ctx) error {
+	order := order_service.Order{}
+	data, err := order.StaffOder_Service()
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -390,7 +412,6 @@ func GetTablenumber_Router(c *fiber.Ctx) error {
 // 	})
 // }
 
-
 func GetTablenumberNotThanhToan_Router(c *fiber.Ctx) error {
 	formSearch := new(FormTableNumber)
 	order := order_service.Order{}
@@ -413,4 +434,3 @@ func GetTablenumberNotThanhToan_Router(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
-
