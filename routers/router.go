@@ -158,6 +158,7 @@ func InitRouter(r *fiber.App) {
 	// reportsRoute.Post("/", v1.GetCharTopDoanhThu_Router)
 	reportsRoute.Post("/itemcode", v1.GetCharTopItemCode_Router)
 	reportsRoute.Post("/chartday", v1.GetCharDay_Router)
+	reportsRoute.Post("/chartdaycustomer", v1.GetCharDayCus_Router)
 	reportsRoute.Post("/chartmonth", v1.GetCharMonth_Router)
 	reportsRoute.Post("/chartyear", v1.GetCharYear_Router)
 	reportsRoute.Post("/chartdaycircle", v1.GetCharDayCircle_Router)

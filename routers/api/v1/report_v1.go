@@ -120,31 +120,31 @@ func GetYears_Router(c *fiber.Ctx) error {
 	})
 }
 
-func GetCharDay_Router(c *fiber.Ctx) error {
-	formSearch := new(FormSearchMonthYear)
-	item := report_service.ChartMonth{}
-
-	if err := c.BodyParser(formSearch); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-
-	data, err := item.GetChartDay_Service(formSearch.Day, formSearch.Month, formSearch.Year)
-
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"success": true,
-		"data":    data,
-	})
-}
+//	func GetCharDay_Router(c *fiber.Ctx) error {
+//		formSearch := new(FormSearchMonthYear)
+//		item := report_service.ChartMonth{}
+//
+//		if err := c.BodyParser(formSearch); err != nil {
+//			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+//				"error": true,
+//				"msg":   err.Error(),
+//			})
+//		}
+//
+//		data, err := item.GetChartDay_Service(formSearch.Day, formSearch.Month, formSearch.Year)
+//
+//		if err != nil {
+//			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+//				"error": true,
+//				"msg":   err.Error(),
+//			})
+//		}
+//
+//		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+//			"success": true,
+//			"data":    data,
+//		})
+//	}
 func GetCharDayCircle_Router(c *fiber.Ctx) error {
 	formSearch := new(FormSearchMonthYear)
 	item := report_service.Chart{}
@@ -274,7 +274,56 @@ func GetCharYearCircle_Router(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
+func GetCharDay_Router(c *fiber.Ctx) error {
+	formSearch := new(FormNXT)
+	item := report_service.ChartMonth{}
 
+	if err := c.BodyParser(formSearch); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	data, err := item.GetChartDay_Service(formSearch.FromDate, formSearch.ToDate)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    data,
+	})
+}
+func GetCharDayCus_Router(c *fiber.Ctx) error {
+	formSearch := new(FormNXT)
+	item := report_service.ChartMonth{}
+
+	if err := c.BodyParser(formSearch); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	data, err := item.GetChartDayCus_Service(formSearch.FromDate, formSearch.ToDate)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    data,
+	})
+}
 func GetCharNXT_Router(c *fiber.Ctx) error {
 	formSearch := new(FormNXT)
 	item := report_service.NXT{}

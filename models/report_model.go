@@ -23,6 +23,11 @@ type Chart struct {
 	Total    float64 `gorm:"column: Total" json:"total"`
 	Discount float64 `gorm:"column: Discount" json:"discount"`
 }
+type Customer struct {
+	Sl       string  `gorm:"column: Sl" json:"Sl"`
+	Total    float64 `gorm:"column: Total" json:"total"`
+	Discount float64 `gorm:"column: Discount" json:"discount"`
+}
 type ChartMonth struct {
 	Group    string  `gorm:"column: Group" json:"group"`
 	ItemCode string  `gorm:"column: ItemCode" json:"itemcode"`
@@ -139,24 +144,24 @@ func GetYear_Model() (*[]NameYears, error) {
 //		}
 //		return &item, nil
 //	}
-func GetChartDay_Model(day string, month string, year string) (*[]ChartMonth, error) {
-	item := []ChartMonth{}
-	//result := db.Raw("select SUM(isnull(A.Total,0)) Total, SUM(isnull(A.Discount,0)) Discount from ( " +
-	//	" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
-	//	" from orders t0 " +
-	//	" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
-	//	" ) A ").Find(&item)
-	result := db.Raw("select A.Total Total, A.Discount Discount from ( " +
-		" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
-		" from orders t0 " +
-		" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
-		" ) A ").Find(&item)
-	fmt.Println(&item)
-	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
-		return nil, result.Error
-	}
-	return &item, nil
-}
+//func GetChartDay_Model(day string, month string, year string) (*[]ChartMonth, error) {
+//	item := []ChartMonth{}
+//	//result := db.Raw("select SUM(isnull(A.Total,0)) Total, SUM(isnull(A.Discount,0)) Discount from ( " +
+//	//	" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
+//	//	" from orders t0 " +
+//	//	" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
+//	//	" ) A ").Find(&item)
+//	result := db.Raw("select A.Total Total, A.Discount Discount from ( " +
+//		" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
+//		" from orders t0 " +
+//		" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
+//		" ) A ").Find(&item)
+//	fmt.Println(&item)
+//	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+//		return nil, result.Error
+//	}
+//	return &item, nil
+//}
 
 //	func GetChartDayCircle_Model(day string, month string, year string) (*[]Chart, error) {
 //		item := []Chart{}
@@ -293,6 +298,47 @@ func GetChartYearCircle_Model(year string) (*[]Chart, error) {
 	return &item, nil
 }
 
+// test week
+func GetChartDay_Model(fromdate string, todate string) (*[]ChartMonth, error) {
+	item := []ChartMonth{}
+	//result := db.Raw("select SUM(isnull(A.Total,0)) Total, SUM(isnull(A.Discount,0)) Discount from ( " +
+	//	" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
+	//	" from orders t0 " +
+	//	" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
+	//	" ) A ").Find(&item)
+	result := db.Raw("select A.Total Total, A.Discount Discount from ( " +
+		" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
+		" from orders t0 " +
+		" where t0.DocDate >= '" + fromdate + "' AND t0.DocDate < DATEADD(DAY, 1,'" + todate +
+		"') and t0.ViewPayment = 'off' " +
+		" ) A ").Find(&item)
+	fmt.Println(&item)
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+		return nil, result.Error
+	}
+	return &item, nil
+}
+
+// cus
+func GetChartDayCus_Model(fromdate string, todate string) (*[]Customer, error) {
+	item := []Customer{}
+	//result := db.Raw("select SUM(isnull(A.Total,0)) Total, SUM(isnull(A.Discount,0)) Discount from ( " +
+	//	" select (isnull(t0.DocTotal,0)) Total, ((isnull(t0.Total,0) * (isnull(t0.Discount,0)))/100) Discount " +
+	//	" from orders t0 " +
+	//	" where DAY(t0.DocDate) = '" + day + "' and MONTH(t0.DocDate) = '" + month + "' and YEAR(t0.DocDate) ='" + year + "' and t0.ViewPayment = 'off' " +
+	//	" ) A ").Find(&item)
+	result := db.Raw("select COUNT(DISTINCT A.CardCode) AS Sl, SUM(A.Total) AS Total,  SUM(A.Discount) AS Discount  from ( " +
+		" select t0.CardCode,isnull(t0.DocTotal,0)  AS Total, (isnull(t0.Total,0) * isnull(t0.Discount,0))/100 AS Discount " +
+		" from orders t0 " +
+		" where t0.DocDate >= '" + fromdate + "' AND t0.DocDate < DATEADD(DAY, 1,'" + todate +
+		"') and t0.ViewPayment = 'off' " +
+		" ) A ").Find(&item)
+	fmt.Println(&item)
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
+		return nil, result.Error
+	}
+	return &item, nil
+}
 func GetChartNXT_Model(fromdate string, todate string) (*[]NXT, error) {
 	item := []NXT{}
 	result := db.Raw("select " +

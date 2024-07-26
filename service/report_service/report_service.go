@@ -29,7 +29,11 @@ type ChartMonth struct {
 	Total    float64 `gorm:"column: Total" json:"total"`
 	Discount float64 `gorm:"column: Discount" json:"discount"`
 }
-
+type Customer struct {
+	Sl       string  `gorm:"column: Sl" json:"Sl"`
+	Total    float64 `gorm:"column: Total" json:"total"`
+	Discount float64 `gorm:"column: Discount" json:"discount"`
+}
 type NXT struct {
 	WhsCode  string  `gorm:"column: WhsCode" json:"whscode"`
 	ItemCode string  `gorm:"column: ItemCode" json:"itemcode"`
@@ -71,14 +75,14 @@ func (a *NameYears) GetYear_Service() (*[]models.NameYears, error) {
 	return item, nil
 }
 
-func (a *ChartMonth) GetChartDay_Service(day string, month string, year string) (*[]models.ChartMonth, error) {
-	item, err := models.GetChartDay_Model(day, month, year)
-	if err != nil {
-		return nil, err
-	}
-	//fmt.Println(item)
-	return item, nil
-}
+//	func (a *ChartMonth) GetChartDay_Service(day string, month string, year string) (*[]models.ChartMonth, error) {
+//		item, err := models.GetChartDay_Model(day, month, year)
+//		if err != nil {
+//			return nil, err
+//		}
+//		//fmt.Println(item)
+//		return item, nil
+//	}
 func (a *Chart) GetChartDayCircle_Service(day string, month string, year string) (*[]models.Chart, error) {
 	item, err := models.GetChartDayCircle_Model(day, month, year)
 	if err != nil {
@@ -123,14 +127,30 @@ func (a *Chart) GetChartYearCircle_Service(year string) (*[]models.Chart, error)
 	return item, nil
 }
 
+// test
+func (a *ChartMonth) GetChartDay_Service(fromdate string, todate string) (*[]models.ChartMonth, error) {
+	item, err := models.GetChartDay_Model(fromdate, todate)
+	if err != nil {
+		return nil, err
+	}
+	//fmt.Println(item)
+	return item, nil
+}
+
+// cus
+func (a *ChartMonth) GetChartDayCus_Service(fromdate string, todate string) (*[]models.Customer, error) {
+	item, err := models.GetChartDayCus_Model(fromdate, todate)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(item)
+	return item, nil
+}
 func (a *NXT) GetChartNXT_Service(fromdate string, todate string) (*[]models.NXT, error) {
 	item, err := models.GetChartNXT_Model(fromdate, todate)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("dhjkasdhjas")
-	fmt.Println(item)
-
 	return item, nil
 }
 
