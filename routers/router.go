@@ -102,7 +102,7 @@ func InitRouter(r *fiber.App) {
 	// Order
 	orderRoute := apiv1.Group("/order")
 	orderRoute.Get("/", v1.GetOrder_Router)
-	orderRoute.Get("/staff", v1.Staff_Oder)
+	orderRoute.Post("/staff", v1.Staff_Oder)
 	orderRoute.Get("/:id", v1.GetByIdOrder_Router)
 	orderRoute.Post("/allthanhtoan", v1.GetTablenumberNotThanhToan_Router)
 	orderRoute.Post("/", v1.PostOrder)

@@ -7,38 +7,42 @@ import (
 )
 
 type Items struct {
-	ItemCode   string  `form:"ItemCode" valid:"required"`
-	ItemName   string  `form:"ItemName" valid:"required"`
-	Quantity   int     `form:"Quantity" valid:"required"`
-	Group      string  `form:"Group"`
-	InStock    float64 `form:"InStock"`
-	Price      float64 `form:"Price"`
-	UserAdd    string  `form:"UserAdd"`
-	UserUpdate string  `form:"UserUpdate"`
-	Status     bool    `form:"Status"`
-	Type       string  `form:"Type"`
-	Barcode    string  `form:"Barcode"`
-	Image      string  `form:"Image"`
-	WhsCode    string  `form:"WhsCode"`
-	CardCode   string  `form:"CardCode"`
+	ItemCode     string  `form:"ItemCode" valid:"required"`
+	ItemName     string  `form:"ItemName" valid:"required"`
+	Quantity     int     `form:"Quantity" valid:"required"`
+	Group        string  `form:"Group"`
+	InStock      float64 `form:"InStock"`
+	Price        float64 `form:"Price"`
+	UserAdd      string  `form:"UserAdd"`
+	UserUpdate   string  `form:"UserUpdate"`
+	Status       bool    `form:"Status"`
+	Type         string  `form:"Type"`
+	Barcode      string  `form:"Barcode"`
+	Image        string  `form:"Image"`
+	WhsCode      string  `form:"WhsCode"`
+	CardCode     string  `form:"CardCode"`
+	Bonus        float64 `form:"Bonus"`
+	IdentifiCode string  `form:"IdentifiCode"`
 }
 
 type ItemsUpdate struct {
-	ID         string  `form:"ID"`
-	ItemCode   string  `form:"ItemCode" valid:"required"`
-	ItemName   string  `form:"ItemName" valid:"required"`
-	Quantity   int     `form:"Quantity" valid:"required"`
-	Group      string  `form:"Group"`
-	InStock    float64 `form:"InStock"`
-	Price      float64 `form:"Price"`
-	UserAdd    string  `form:"UserAdd"`
-	UserUpdate string  `form:"UserUpdate"`
-	Status     bool    `form:"Status"`
-	Type       string  `form:"Type"`
-	Barcode    string  `form:"Barcode"`
-	Image      string  `form:"Image"`
-	WhsCode    string  `form:"WhsCode"`
-	CardCode   string  `form:"CardCode"`
+	ID           string  `form:"ID"`
+	ItemCode     string  `form:"ItemCode" valid:"required"`
+	ItemName     string  `form:"ItemName" valid:"required"`
+	Quantity     int     `form:"Quantity" valid:"required"`
+	Group        string  `form:"Group"`
+	InStock      float64 `form:"InStock"`
+	Price        float64 `form:"Price"`
+	UserAdd      string  `form:"UserAdd"`
+	UserUpdate   string  `form:"UserUpdate"`
+	Status       bool    `form:"Status"`
+	Type         string  `form:"Type"`
+	Barcode      string  `form:"Barcode"`
+	Image        string  `form:"Image"`
+	WhsCode      string  `form:"WhsCode"`
+	CardCode     string  `form:"CardCode"`
+	Bonus        float64 `form:"Bonus"`
+	IdentifiCode string  `form:"IdentifiCode"`
 }
 
 type FormSearch struct {
@@ -58,20 +62,22 @@ func PostItems(c *fiber.Ctx) error {
 		})
 	}
 	itemService := item_service.Items{
-		ItemCode:   form.ItemCode,
-		ItemName:   form.ItemName,
-		Quantity:   form.Quantity,
-		Group:      form.Group,
-		InStock:    form.InStock,
-		Price:      form.Price,
-		UserAdd:    form.UserAdd,
-		UserUpdate: form.UserUpdate,
-		Status:     form.Status,
-		Type:       form.Type,
-		Barcode:    form.Barcode,
-		Image:      form.Image,
-		WhsCode:    form.WhsCode,
-		CardCode:   form.CardCode,
+		ItemCode:     form.ItemCode,
+		ItemName:     form.ItemName,
+		Quantity:     form.Quantity,
+		Group:        form.Group,
+		InStock:      form.InStock,
+		Price:        form.Price,
+		UserAdd:      form.UserAdd,
+		UserUpdate:   form.UserUpdate,
+		Status:       form.Status,
+		Type:         form.Type,
+		Barcode:      form.Barcode,
+		Image:        form.Image,
+		WhsCode:      form.WhsCode,
+		CardCode:     form.CardCode,
+		Bonus:        form.Bonus,
+		IdentifiCode: form.IdentifiCode,
 	}
 	if err := itemService.AddItems(); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -97,18 +103,20 @@ func PutItems(c *fiber.Ctx) error {
 	}
 	itemService := item_service.Items{
 		// ItemCode:   form.ItemCode,
-		ItemName:   form.ItemName,
-		Quantity:   form.Quantity,
-		Group:      form.Group,
-		InStock:    form.InStock,
-		Price:      form.Price,
-		UserUpdate: form.UserUpdate,
-		Status:     form.Status,
-		Type:       form.Type,
-		Barcode:    form.Barcode,
-		Image:      form.Image,
-		WhsCode:    form.WhsCode,
-		CardCode:   form.CardCode,
+		ItemName:     form.ItemName,
+		Quantity:     form.Quantity,
+		Group:        form.Group,
+		InStock:      form.InStock,
+		Price:        form.Price,
+		UserUpdate:   form.UserUpdate,
+		Status:       form.Status,
+		Type:         form.Type,
+		Barcode:      form.Barcode,
+		Image:        form.Image,
+		WhsCode:      form.WhsCode,
+		CardCode:     form.CardCode,
+		Bonus:        form.Bonus,
+		IdentifiCode: form.IdentifiCode,
 	}
 
 	err := itemService.UpdateItems(c.Params("id"))

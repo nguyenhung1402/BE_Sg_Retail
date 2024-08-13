@@ -27,6 +27,7 @@ type Order struct {
 	Creator      string
 	ViewPayment  string
 	CodeAuto     string
+	Dv           string
 	OrderDetails []OrderDetails
 	// IDVen        int
 	// PONum        string
@@ -34,9 +35,9 @@ type Order struct {
 	// DeliveryDate string
 }
 type StaffOrder struct {
-	StaffCode string  `gorm:"column:StaffCode" json:"staffcode"`
-	StaffName string  `gorm:"column:StaffName" json:"staffname"`
-	TotalSum  float64 `gorm:"column:Total" json:"total"`
+	StaffName string
+	Doanh_Thu string
+	Toc       string
 }
 type OrderDetails struct {
 	ItemCode string
@@ -102,6 +103,7 @@ func (a *Order) AddOrder() error {
 		"creator":      a.Creator,
 		"viewpayment":  a.ViewPayment,
 		"codeauto":     autoOrder,
+		"dv":           a.Dv,
 		"orderDetails": a.OrderDetails,
 		// "idven":        a.IDVen,
 		// "ponum":        a.PONum,
@@ -161,8 +163,8 @@ func (a *Order) GetOrder_Service() (*[]models.Order, error) {
 }
 
 // staff
-func (a *Order) StaffOder_Service() (*[]models.StaffOrder, error) {
-	order, err := models.StaffOrder_Model()
+func (a *StaffOrder) StaffOder_Service(fromdate string, todate string) (*[]models.StaffOrder, error) {
+	order, err := models.StaffOrder_Model(fromdate, todate)
 	if err != nil {
 		return nil, err
 	}

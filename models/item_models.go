@@ -9,40 +9,44 @@ import (
 
 type Items struct {
 	gorm.Model
-	ItemCode   string    `gorm:"column:ItemCode" json:"itemcode"`
-	ItemName   string    `gorm:"column:ItemName" json:"itemname"`
-	Quantity   int       `gorm:"column:Quantity" json:"quantity"`
-	Group      string    `gorm:"column:Group" json:"group"`
-	InStock    float64   `gorm:"column:InStock" json:"instock"`
-	Price      float64   `gorm:"column:Price" json:"price"`
-	DocDate    time.Time `gorm:"column:DocDate" json:"docdate"`
-	UserAdd    string    `gorm:"column:UserAdd" json:"useradd"`
-	UserUpdate string    `gorm:"column:UserUpdate" json:"userupdate"`
-	Status     bool      `gorm:"column:Status" json:"status"`
-	Type       string    `gorm:"column:Type" json:"type"`
-	Barcode    string    `gorm:"column:Barcode" json:"barcode"`
-	Image      string    `gorm:"column:Image" json:"image"`
-	WhsCode    string    `gorm:"column: WhsCode" json:"whscode"`
-	CardCode   string    `gorm:"column: CardCode" json:"cardcode"`
+	ItemCode     string    `gorm:"column:ItemCode" json:"itemcode"`
+	ItemName     string    `gorm:"column:ItemName" json:"itemname"`
+	Quantity     int       `gorm:"column:Quantity" json:"quantity"`
+	Group        string    `gorm:"column:Group" json:"group"`
+	InStock      float64   `gorm:"column:InStock" json:"instock"`
+	Price        float64   `gorm:"column:Price" json:"price"`
+	DocDate      time.Time `gorm:"column:DocDate" json:"docdate"`
+	UserAdd      string    `gorm:"column:UserAdd" json:"useradd"`
+	UserUpdate   string    `gorm:"column:UserUpdate" json:"userupdate"`
+	Status       bool      `gorm:"column:Status" json:"status"`
+	Type         string    `gorm:"column:Type" json:"type"`
+	Barcode      string    `gorm:"column:Barcode" json:"barcode"`
+	Image        string    `gorm:"column:Image" json:"image"`
+	WhsCode      string    `gorm:"column: WhsCode" json:"whscode"`
+	CardCode     string    `gorm:"column: CardCode" json:"cardcode"`
+	Bonus        float64   `gorm:"column: Bonus" json:"bonus"`
+	IdentifiCode string    `gorm:"column: IdentifiCode" json:"identificode"`
 }
 
 func AddItems(data map[string]interface{}) error {
 	item := Items{
-		ItemCode:   data["itemcode"].(string),
-		ItemName:   data["itemname"].(string),
-		Quantity:   data["quantity"].(int),
-		Group:      data["group"].(string),
-		InStock:    data["instock"].(float64),
-		Price:      data["price"].(float64),
-		DocDate:    data["docdate"].(time.Time),
-		UserAdd:    data["useradd"].(string),
-		UserUpdate: data["userupdate"].(string),
-		Status:     data["status"].(bool),
-		Type:       data["type"].(string),
-		Barcode:    data["barcode"].(string),
-		Image:      data["image"].(string),
-		WhsCode:    data["whscode"].(string),
-		CardCode:   data["cardcode"].(string),
+		ItemCode:     data["itemcode"].(string),
+		ItemName:     data["itemname"].(string),
+		Quantity:     data["quantity"].(int),
+		Group:        data["group"].(string),
+		InStock:      data["instock"].(float64),
+		Price:        data["price"].(float64),
+		DocDate:      data["docdate"].(time.Time),
+		UserAdd:      data["useradd"].(string),
+		UserUpdate:   data["userupdate"].(string),
+		Status:       data["status"].(bool),
+		Type:         data["type"].(string),
+		Barcode:      data["barcode"].(string),
+		Image:        data["image"].(string),
+		WhsCode:      data["whscode"].(string),
+		CardCode:     data["cardcode"].(string),
+		Bonus:        data["bonus"].(float64),
+		IdentifiCode: data["identificode"].(string),
 	}
 
 	fmt.Println(item)
@@ -60,33 +64,38 @@ func UpdateItem_Model(id string, data map[string]interface{}) error {
 
 	item := Items{
 		// ItemCode:   data["ItemCode"].(string),
-		ItemName:   data["ItemName"].(string),
-		Quantity:   data["Quantity"].(int),
-		Group:      data["Group"].(string),
-		InStock:    data["InStock"].(float64),
-		Price:      data["Price"].(float64),
-		UserUpdate: data["UserUpdate"].(string),
-		Status:     data["Status"].(bool),
-		Type:       data["Type"].(string),
-		Barcode:    data["Barcode"].(string),
-		Image:      data["Image"].(string),
-		WhsCode:    data["WhsCode"].(string),
-		CardCode:   data["CardCode"].(string),
+		ItemName:     data["ItemName"].(string),
+		Quantity:     data["Quantity"].(int),
+		Group:        data["Group"].(string),
+		InStock:      data["InStock"].(float64),
+		Price:        data["Price"].(float64),
+		UserUpdate:   data["UserUpdate"].(string),
+		Status:       data["Status"].(bool),
+		Type:         data["Type"].(string),
+		Barcode:      data["Barcode"].(string),
+		Image:        data["Image"].(string),
+		WhsCode:      data["WhsCode"].(string),
+		CardCode:     data["CardCode"].(string),
+		Bonus:        data["Bonus"].(float64),
+		IdentifiCode: data["IdentifiCode"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		// "ItemCode": item.ItemCode,
-		"ItemName": item.ItemName,
-		"Quantity": item.Quantity,
-		"Group":    item.Group,
-		"InStock":  item.InStock,
-		"Price":    item.Price,
-		"Status":   item.Status,
-		"Type":     item.Type,
-		"Barcode":  item.Barcode,
-		"Image":    item.Image,
-		"WhsCode":  item.WhsCode,
-		"CardCode": item.CardCode}).Error; err != nil {
+		"ItemName":     item.ItemName,
+		"Quantity":     item.Quantity,
+		"Group":        item.Group,
+		"InStock":      item.InStock,
+		"Price":        item.Price,
+		"Status":       item.Status,
+		"Type":         item.Type,
+		"Barcode":      item.Barcode,
+		"Image":        item.Image,
+		"WhsCode":      item.WhsCode,
+		"IdentifiCode": item.IdentifiCode,
+		"Bonus":        item.Bonus,
+		"CardCode":     item.CardCode},
+	).Error; err != nil {
 		return err
 	}
 	return nil

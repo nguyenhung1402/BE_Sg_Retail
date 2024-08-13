@@ -29,6 +29,7 @@ type Order struct {
 	Creator      string         `gorm:"column:Creator" json:"creator"`
 	ViewPayment  string         `gorm:"column:ViewPayment" json:"viewpayment"`
 	CodeAuto     string         `gorm:"column:CodeAuto" json:"codeauto"`
+	DV           string         `gorm:"column:DV" json:"dv"`
 	OrderDetails []OrderDetails `gorm:"foreignKey:IDOrder;" json:"orderDetails"`
 	// IDVen        int         `gorm:"column:IDVen" json:"idven"`
 	// PONum        string      `gorm:"column:PONum" json:"ponum"`
@@ -38,9 +39,9 @@ type Order struct {
 }
 
 type StaffOrder struct {
-	StaffCode string  `gorm:"column:StaffCode" json:"staffcode"`
-	StaffName string  `gorm:"column:StaffName" json:"staffname"`
-	Total     float64 `gorm:"column:Total" json:"total"`
+	StaffName string  `gorm:"column:StaffName" json:"staffcode"`
+	Doanh_Thu string  `gorm:"column:DOANH_THU" json:"doanh_thu"`
+	Toc       float64 `gorm:"column:TOC" json:"toc"`
 }
 type WhsCodeQuantity struct {
 	WhsCode  string `gorm:"column:WhsCode" json:"whscode"`
@@ -78,7 +79,7 @@ func AddOrder(data map[string]interface{}, dataDetail []map[string]interface{}) 
 		Refund:       data["refund"].(float64),
 		CardCode:     data["cardcode"].(string),
 		CardName:     data["cardname"].(string),
-		StaffName:    data["staffname"].(string),
+		DV:           data["dv"].(string),
 		StaffCode:    data["staffcode"].(string),
 		VAT:          data["vat"].(int),
 		Creator:      data["creator"].(string),
@@ -167,12 +168,51 @@ func GetOrder_Model() (*[]Order, error) {
 
 //Staff Oder
 
-func StaffOrder_Model() (*[]StaffOrder, error) {
+func StaffOrder_Model(fromdate string, todate string) (*[]StaffOrder, error) {
 	order := []StaffOrder{}
-	err := db.Raw(`SELECT StaffCode, StaffName, SUM(Total) AS Total
-		FROM orders
-		GROUP BY StaffCode, StaffName;
-	`).Find(&order).Error
+
+	err := db.Raw(`WITH EmployeeCounts AS (
+    SELECT 
+        o.ID,
+        COUNT(*) AS EmployeeCount
+    FROM 
+        orders o
+        CROSS APPLY STRING_SPLIT(o.StaffCode, ',') AS staff_split
+    WHERE 
+        o.DocDate >= ?
+        AND o.DocDate < DATEADD(DAY, 1, ?)
+    GROUP BY 
+        o.ID
+),
+EmployeeRevenue AS (
+    SELECT 
+        o.ID,
+        s.StaffName,
+        CASE 
+            WHEN o.DV = 0 THEN o.Total / ec.EmployeeCount
+            ELSE 0
+        END AS RevenuePerEmployee,
+        CASE 
+            WHEN o.DV = 1 THEN 1
+            ELSE 0
+        END AS TOCPerEmployee
+    FROM 
+        orders o
+        CROSS APPLY STRING_SPLIT(o.StaffCode, ',') AS staff_split
+        JOIN staffs s ON s.StaffCode = staff_split.value
+        JOIN EmployeeCounts ec ON o.ID = ec.ID
+    WHERE 
+        o.DocDate >= ?
+        AND o.DocDate < DATEADD(DAY, 1, ?)
+)
+SELECT 
+    StaffName,
+    SUM(RevenuePerEmployee) AS DOANH_THU,
+    SUM(TOCPerEmployee) AS TOC
+FROM 
+    EmployeeRevenue
+GROUP BY 
+    StaffName`, fromdate, todate, fromdate, todate).Find(&order).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err

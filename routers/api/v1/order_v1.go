@@ -25,6 +25,7 @@ type FormOrder struct {
 	StaffCode    string             `json:"StaffCode"`
 	StaffName    string             `json:"StaffName"`
 	VAT          int                `json:"VAT"`
+	Dv           string             `json:"Dv"`
 	Creator      string             `json:"Creator"`
 	CodeAuto     string             `json:"CodeAuto"`
 	ViewPayment  string             `json:"ViewPayment"`
@@ -123,6 +124,7 @@ func PostOrder(c *fiber.Ctx) error {
 		StaffCode:   form.StaffCode,
 		VAT:         form.VAT,
 		Creator:     form.Creator,
+		Dv:          form.Dv,
 		ViewPayment: form.ViewPayment,
 		// IDVen:        form.IDVen,
 		// PONum:        form.PONum,
@@ -234,8 +236,16 @@ func GetOrder_Router(c *fiber.Ctx) error {
 
 // staff
 func Staff_Oder(c *fiber.Ctx) error {
-	order := order_service.Order{}
-	data, err := order.StaffOder_Service()
+	order := order_service.StaffOrder{}
+	formSearch := new(FormNXT)
+	if err := c.BodyParser(formSearch); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	data, err := order.StaffOder_Service(formSearch.FromDate, formSearch.ToDate)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
