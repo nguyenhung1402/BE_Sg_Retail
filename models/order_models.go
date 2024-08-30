@@ -193,7 +193,7 @@ EmployeeRevenue AS (
             ELSE 0
         END AS RevenuePerEmployee,
         CASE 
-            WHEN o.DV = 1 THEN 1
+            WHEN o.DV = 1 THEN 20000
             ELSE 0
         END AS TOCPerEmployee
     FROM 
